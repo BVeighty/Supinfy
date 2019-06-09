@@ -3,6 +3,8 @@ for details on configuring this project to bundle and minify static web assets. 
 body {
     padding-top: 50px;
     padding-bottom: 20px;
+    background-color: #3B0008;
+    color: white;
 }
 
 /* Wrapping element */
@@ -21,6 +23,16 @@ body {
 /* Make .svg files in the carousel display properly in older browsers */
 .carousel-inner .item img[src$=".svg"] {
     width: 100%;
+}
+
+.btn-primary {
+    background-color: #B10B22;
+    border-color: #B10B22;
+}
+
+.btn-primary:hover {
+    background-color: #64000E;
+    border-color: #64000E;
 }
 
 /* QR code generator */

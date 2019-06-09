@@ -12,6 +12,8 @@ namespace Supinfy.Controllers
     {
         public IActionResult Index()
         {
+            var test = User;
+
             return View();
         }
 
