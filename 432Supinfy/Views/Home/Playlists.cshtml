@@ -1,0 +1,122 @@
+﻿
+@{
+    ViewData["Title"] = "Playlists";
+}
+
+<div id="playlists">
+    <h1>Playlists</h1>
+
+    <div class="row">
+        <div class="col-2"></div>
+
+        <div class="col-8" style="text-align: right;">
+            <a data-toggle="modal" data-target="#newPlaylistModal" style="color:#8F081B;">Create a playlist</a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-2"></div>
+
+        <div id="results" class="col-8"></div>
+    </div>
+
+    <div id="newPlaylistModal" class="modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <p>
+                        <input id="newPlaylistName" class="form-control" type="text" placeholder="Name of the new playlist"/>
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" onclick="createPlaylist()">Create</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="playlist" style="display: none;">
+    <h1 id="playlistTitle"></h1>
+
+    <div class="row">
+        <div class="col-2"></div>
+
+        <div class="col-8" style="text-align: left;">
+            <a style="color:#8F081B;" onclick="backToPlaylists()">Back</a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-2"></div>
+
+        <div id="playlistResults" class="col-8"></div>
+    </div>
+</div>
+
+@section scripts {
+<script>
+    function getPlaylists() {
+        $.get("@Url.Action("GetPlaylists", "Home")", function (data, status) {
+            var results;
+
+            data.forEach(function (item) {
+                results += "<div class=\"row\"style=\"margin-top: 20px; margin-bottom: 20px; cursor: pointer;\" onclick=\"getPlaylistContent(" + item.id + ")\">" +
+                        "<h3 style=\"color: #8F081B;\">" + item.name + "</h3>" +
+                    "</div>"
+            });
+
+            results = results.replace(/undefined/gi, '');
+
+            document.getElementById("results").innerHTML = results;
+        });
+    }
+
+    function createPlaylist() {
+        $.get("@Url.Action("CreatePlaylist", "Home")?name=" + document.getElementById("newPlaylistName").value, function (data, status) {
+            getPlaylists();
+        });
+
+        $("#newPlaylistModal").modal("hide");
+    }
+
+    function getPlaylistContent(id) {
+        $.get("@Url.Action("GetPlaylistContent", "Home")?id=" + id, function (data, status) {
+            document.getElementById("playlistTitle").innerHTML = data.name;
+
+            var results = "";
+
+            if (data.items != null) {
+                data.items.forEach(function (item) {
+                    $.get("@Url.Action("GetTrackById", "Home")?id=" + item.trackId, function (data, status) {
+                        results += "<div class=\"row\" style=\"margin-top: 20px; margin-bottom: 20px; cursor: pointer;\" onclick=\"playTrack(" + data.id + ")\">" +
+                                "<div class=\"col-4\">" +
+                                    "<img src=\"" + data.image + "\" height=\"150\" width=\"150\" style=\"margin-right: 20px;\" />" +
+                                "</div>" +
+                                "<div class=\"col-8\" style=\"padding-top: 20px;\">" +
+                                    "<h3 style=\"color: #8F081B;\">" + data.name + "</h3>" +
+                                    "<p>" + data.album_name + " - " + data.artist_name + "</p>" +
+                                "</div>" +
+                            "</div>";
+                    });
+                });
+            }
+
+            document.getElementById("playlistResults").innerHTML = results;
+
+            document.getElementById("playlists").style.display = "none";
+            document.getElementById("playlist").style.display = "block";
+        });
+    }
+
+    function backToPlaylists() {
+        document.getElementById("playlists").style.display = "block";
+        document.getElementById("playlist").style.display = "none";
+    }
+
+    $("document").ready(function () {
+        getPlaylists();
+    });
+</script>
+}

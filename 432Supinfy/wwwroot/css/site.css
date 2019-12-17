@@ -1,0 +1,120 @@
+﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
+for details on configuring this project to bundle and minify static web assets. */
+
+a.navbar-brand {
+  white-space: normal;
+  text-align: center;
+  word-break: break-all;
+}
+
+/* Sticky footer styles
+-------------------------------------------------- */
+html {
+  font-size: 14px;
+}
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+.border-top {
+  border-top: 1px solid #e5e5e5;
+}
+.border-bottom {
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.box-shadow {
+  box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
+}
+
+button.accept-policy {
+  font-size: 1rem;
+  line-height: inherit;
+}
+
+/* Sticky footer styles
+-------------------------------------------------- */
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  /* Margin bottom by footer height */
+  margin-bottom: 60px;
+}
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  white-space: nowrap;
+  /* Set the fixed height of the footer here */
+  height: 60px;
+  line-height: 60px; /* Vertically center the text there */
+}
+
+/* User defined
+-------------------------------------------------- */
+body {
+    background-color: #121212;
+    color: white;
+}
+
+a {
+    color: #8F081B;
+    cursor: pointer;
+}
+
+.nav-item:hover {
+    background-color: #64000E;
+}
+
+.btn-primary {
+    background-color: #64000E;
+    border-color: #64000E;
+}
+
+    .btn-primary:hover {
+        background-color: #3B0008;
+        border-color: #3B0008;
+    }
+
+.nav-pills .nav-link.active {
+    background-color: #64000E;
+}
+
+    .nav-pills .nav-link.active:hover {
+        background-color: #64000E;
+    }
+
+.nav-pills .nav-link:hover {
+    background-color: #64000E;
+    color: white;
+}
+
+.btn-link {
+    color: #64000E;
+}
+
+    .btn-link:hover {
+        color: #3B0008;
+    }
+
+#player {
+    height: 100px;
+    background-color: black;
+    box-shadow: 0 -3px 6px rgba(0, 0, 0, 0.2);
+}
+
+#player-image {
+    height: 100px;
+    width: 100px;
+    display: inline-block;
+    background-color: #080808;
+}
+
+#player-controls {
+    display: inline-block;
+}

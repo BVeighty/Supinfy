@@ -1,0 +1,117 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Supinfy</title>
+
+    <environment include="Development">
+        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+    </environment>
+    <environment exclude="Development">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+              asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
+              asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute"
+              crossorigin="anonymous"
+              integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" />
+    </environment>
+    <link rel="stylesheet" href="~/css/site.css" />
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark box-shadow mb-3" style="background-color: black;">
+            <div class="container">
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">_432Supinfy</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
+                    <partial name="_LoginPartial" />
+
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <partial name="_CookieConsentPartial" />
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    @if (SignInManager.IsSignedIn(User))
+    {
+        <div id="player" class="fixed-bottom">
+            <div id="player-image">
+                <img id="track-img" height="100" width="100"/>
+            </div>
+
+            <div id="player-controls">
+                <audio id="audio" controls></audio>
+            </div>
+        </div>
+    }
+
+    <environment include="Development">
+        <script src="~/lib/jquery/dist/jquery.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.js"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"
+                asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
+                asp-fallback-test="window.jQuery"
+                crossorigin="anonymous"
+                integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=">
+        </script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"
+                asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"
+                asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal"
+                crossorigin="anonymous"
+                integrity="sha384-xrRywqdh3PHs8keKZN+8zzc5TX0GRTLCcmivcbNJWm2rs5C8PRhcEn3czEjhAO9o">
+        </script>
+    </environment>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script>
+        var playing;
+
+        function playTrack(id) {
+            $.get("@Url.Action("GetTrackById", "Home")?id=" + id, function (data, status) {
+                playing = data;
+                document.getElementById("track-img").setAttribute("src", data.image);
+                document.getElementById("audio").setAttribute("src", data.audio);
+                document.getElementById("audio").play();
+            });
+        }
+
+        function searchTrack() {
+            $.get("@Url.Action("SearchTracks", "Home")?search=" + document.getElementById("search").value, function (data, status) {
+                var results;
+
+                data.forEach(function (item) {
+                    results += "<div class=\"row\" style=\"margin-top: 20px; margin-bottom: 20px; cursor: pointer;\" onclick=\"playTrack(" + item.id + ")\">" +
+                            "<div class=\"col-4\">" +
+                                "<img src=\"" + item.image + "\" height=\"150\" width=\"150\" style=\"margin-right: 20px;\" />" +
+                            "</div>" +
+                            "<div class=\"col-8\" style=\"padding-top: 20px;\">" +
+                                "<h3 style=\"color: #8F081B;\">" + item.name + "</h3>" +
+                                "<p>" + item.album_name + " - " + item.artist_name + "</p>" +
+                            "</div>" +
+                        "</div>";
+                });
+
+                results = results.replace(/undefined/gi, '');
+
+                document.getElementById("results").innerHTML = results;
+            });
+
+        }
+    </script>
+
+    @RenderSection("Scripts", required: false)
+</body>
+</html>
